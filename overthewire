@@ -1,0 +1,16 @@
+Bandits Wargame
+
+Level 1 
+loginned via bandit0 and bandit0
+ls for locating file in the current directory
+found readme file
+cat readme gave boJ9jbbUNNfktd78OOpsqOltutMc3MY1 which is password for next level bandit1
+
+Level 2
+ls gave a file named -
+we can open it via cat ./- or any other operation with other commands we have to use -- or even we can use cat < -
+it gave the password for level bandit2
+CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
+
+level 3
+
