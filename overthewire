@@ -1,5 +1,8 @@
 Bandits Wargame
 
+Commands you may need to solve these levels
+ls, cd, cat, file, du, find, grep
+
 Level 1 
 loginned via bandit0 and bandit0
 ls for locating file in the current directory
@@ -65,6 +68,24 @@ cat gives
 DXjZPULLxYr17uwoI01bNLQbtFemEgo7 with long spaces, tried for bandit6 and it worked :)
 
 Level 7
+the guide says the file has these properties:
+owned by user bandit7
+owned by group bandit6
+33 bytes in size
+so, ls gave nothing, neither ls -la
+so maybe the file is under / and not in the current user directory
+found out find command has parameters to search files for groups, users and size
+so,
+find / -size 33c -group bandit6 -user bandit7
+gave long list of permission denied except
+/var/lib/dpkg/info/bandit7.password
+which upon cat gave
+HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs for bandit7
+
+Commands you may need to solve these levels
+grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd
+
+level 8
 
 
 
