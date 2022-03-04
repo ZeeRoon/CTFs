@@ -13,4 +13,40 @@ it gave the password for level bandit2
 CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
 
 level 3
+upon ls a file is there called
+spaces in this filename
+yeah literally, so we have to open it we can open it by using "" or ' '
+or use \ between the every spaced letter
+so after cat "spaces in this filename", it gave
+UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK for bandit3
+
+Level 4
+we got a directory named in here upon ls
+cd inhere and ls gave nothing but since the level suggested it has a hidden filename
+ls -la gave .hidden file
+cat .hidden gave 
+pIwrPrtPN36QITSp3EQaw936yaFoFgAB for bandit4
+
+level 5
+upon ls gave inhere directory, on cd to it, it gave 9 files with -file00 to 09 series
+cat on first file gave bizzare output, since the intro to level gave that the password is in a human readable
+so we can either check each of them and clearing our screen if it messed up but there is also a better way
+file is a command which can be used for seeing file type, now we have to list all the files with type in single command
+file * gave error as the name starts with - so we have to do
+file -- *
+which will list all the types
+-file00: data
+-file01: data
+-file02: data
+-file03: data
+-file04: data
+-file05: data
+-file06: data
+-file07: ASCII text
+-file08: data
+-file09: data
+here file 7 is readable which gave
+koReBOKuIDDepwhWk7jZC0RTdopnAYKh for bandit5
+
+level 6
 
