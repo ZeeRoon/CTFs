@@ -49,4 +49,25 @@ here file 7 is readable which gave
 koReBOKuIDDepwhWk7jZC0RTdopnAYKh for bandit5
 
 level 6
+the guide says the file has these properties:
+human-readable
+1033 bytes in size
+not executable
+upon ls, a directory inhere with many subdirectories maybeinhere found, which further contained many other files with spaced, dot, - names in naming
+we can use ls * -lh and analyze the file size nearest 1.(something)K but we have to do this manaully, so I found find command with -size parameter will
+shorten our search process, I simply searched
+find ./ -size 1033c (c for bytes)
+which gave
+./maybehere07/.file2
+upon file on it, it gave 
+./maybehere07/.file2: ASCII text, with very long lines
+cat gives 
+DXjZPULLxYr17uwoI01bNLQbtFemEgo7 with long spaces, tried for bandit6 and it worked :)
+
+Level 7
+
+
+
+
+
 
