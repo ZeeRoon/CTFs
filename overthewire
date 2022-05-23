@@ -3,19 +3,19 @@ Bandits Wargame
 Commands you may need to solve these levels
 ls, cd, cat, file, du, find, grep
 
-Level 1 
+Level 0
 loginned via bandit0 and bandit0
 ls for locating file in the current directory
 found readme file
 cat readme gave boJ9jbbUNNfktd78OOpsqOltutMc3MY1 which is password for next level bandit1
 
-Level 2
+Level 1
 ls gave a file named -
 we can open it via cat ./- or any other operation with other commands we have to use -- or even we can use cat < -
 it gave the password for level bandit2
 CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
 
-level 3
+level 2
 upon ls a file is there called
 spaces in this filename
 yeah literally, so we have to open it we can open it by using "" or ' '
@@ -23,14 +23,14 @@ or use \ between the every spaced letter
 so after cat "spaces in this filename", it gave
 UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK for bandit3
 
-Level 4
+Level 3
 we got a directory named in here upon ls
 cd inhere and ls gave nothing but since the level suggested it has a hidden filename
 ls -la gave .hidden file
 cat .hidden gave 
 pIwrPrtPN36QITSp3EQaw936yaFoFgAB for bandit4
 
-level 5
+level 4
 upon ls gave inhere directory, on cd to it, it gave 9 files with -file00 to 09 series
 cat on first file gave bizzare output, since the intro to level gave that the password is in a human readable
 so we can either check each of them and clearing our screen if it messed up but there is also a better way
@@ -51,7 +51,7 @@ which will list all the types
 here file 7 is readable which gave
 koReBOKuIDDepwhWk7jZC0RTdopnAYKh for bandit5
 
-level 6
+level 5
 the guide says the file has these properties:
 human-readable
 1033 bytes in size
@@ -67,7 +67,7 @@ upon file on it, it gave
 cat gives 
 DXjZPULLxYr17uwoI01bNLQbtFemEgo7 with long spaces, tried for bandit6 and it worked :)
 
-Level 7
+Level 6
 the guide says the file has these properties:
 owned by user bandit7
 owned by group bandit6
@@ -85,7 +85,7 @@ HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs for bandit7
 Commands you may need to solve these levels
 grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd
 
-level 8
+level 7
 The guide or level goal says
 The password for the next level is stored in the file data.txt next to the word millionth
 so
@@ -94,7 +94,7 @@ then
 grep millionth data.txt gave
 millionth       cvX2JJa4CFALtqS87jk27qwqGhBM9plV for bandit8
 
-Level 9
+Level 8
 The level goal says
 The password for the next level is stored in the file data.txt and is the only line of text that occurs only once
 so we have given a file with random keywords like the Flag we have to find, all contains duplicate but at random position
@@ -104,7 +104,7 @@ sort data.txt | uniq -u (-u for find only uniq)
 which gave
 UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR for bandit9
 
-Level 10
+Level 9
 The level goal says
 The password for the next level is stored in the file data.txt in one of the few human-readable strings, preceded by several ‘=’ characters.
 so, 
@@ -118,7 +118,7 @@ Z)========== is
 the last line characters looks like a password
 so truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk is for bandit10
 
-Level 11
+Level 10
 The level goal says
 The password for the next level is stored in the file data.txt, which contains base64 encoded data
 so we have a tool called base64 which decodes or encodes in base64, so upon decode
@@ -126,19 +126,70 @@ base64 -d data.txt, it gives
 The password is IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR 
 which is the password for bandit11
 
-Level 12
+Level 11
 The level goal says
 The password for the next level is stored in the file data.txt, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions
 since as goal says its a rot13, then we have to rotate the keys or translate the cipher, for that we have a tool tr for translating multiples sets
-we will be piping the output of the data.txt to tr and translating chars with sets that is [ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz] to 
-[NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm], in the tools parameter theres a different usage, it uses A-Z for all uppercase characters A to Z so likewise we will do
-cat data.txt | tr -t [a-zA-Z] [N-ZA-Mn-za-m] which will translate every a-z and A-Z character with N-Z, A-M and n-z, a-m
+we will be piping the output of the data.txt to tr and translating chars with sets that is [abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ] to 
+[nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM], in the tools parameter theres a different usage, it uses A-Z for all uppercase characters A to Z 
+so likewise we will do
+cat data.txt | tr -t [a-zA-Z] [n-za-mN-ZA-M] 
+which will translate every a-z and A-Z character with N-Z, A-M and n-z, a-m
 which will give us 
-tHE PASSWORD IS 5tE8y4DRGcrFcX8UGDWUex8kfc6K2euU
+The password is 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
 which is password for bandit 12
 
-Level 13
+Level 12
 The level goal says
+The password for the next level is stored in the file data.txt, which is a hexdump of a file that has been repeatedly compressed. For this level it may 
+be useful to create a directory under /tmp in which you can work using mkdir. For example: mkdir /tmp/myname123. Then copy the datafile using cp, and 
+rename it using mv (read the manpages!)
+created a folder at /tmp/
+moved data.txt there
+upon checking file type it showed simple file but as the description says its a dump file then we have to undump it, for which we will use xxd
+xxd -r data.txt > undump
+will give us the undumped file
+again upon file checking it showed this
+gzip compressed data, was "data2.bin", last modified: Thu May  7 18:14:30 2020, max compression, from Unix
+so this is a gzip file repeatedly compressed
+upon inspecting the gzip manual and multiple tries (it was giving unknown suffix) I found that zcat is actually doing something
+zcat undump > undump2
+and upon file type check it showed
+bzip2 compressed data, block size = 900k
+ok now we have to use bzip2, inspecting man pages :)
+well 
+bzip2 -d2 undump2
+did the trick (-d for decompress and -2 for block size 900k)
+but output was saved to undump2 due to unknown suffix or I should have used a flag :(
+again check file type 
+found again a gzip file
+zcated it again and saved it in undump3
+again checking file type revealed it as POSIX tar archive (what the F.....)
+okay now looking for tar man pages .....
+tar --extract -f undump3 did the trick
+new file with data5.bin is shown
+again its POSIX tar (F.....)
+again untaring it got me data6.bin which is a bzip2 compressed file :`O
+bzip gave me data6.bin.out again and its a POSIX tar (haaaaaa!!!!!)
+untarring gave data8.bin which is a gzip file :===( originally data9.bin
+zcat gave data9.bin and finally its a text
+which says
+The password is 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+yeaaaaah!!!
+
+For these level these commands will be used
+ssh, telnet, nc, openssl, s_client, nmap
+
+Level 13:
+the goal says
+The password for the next level is stored in /etc/bandit_pass/bandit14 and can only be read by user bandit14. For this level, you don’t get the next 
+password, but you get a private SSH key that can be used to log into the next level. Note: localhost is a hostname that refers to the machine you are 
+working on
+
+until next time, I will be alive.....
+
+
+
 
 
 
