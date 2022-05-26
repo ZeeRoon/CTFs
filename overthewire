@@ -175,6 +175,7 @@ untarring gave data8.bin which is a gzip file :===( originally data9.bin
 zcat gave data9.bin and finally its a text
 which says
 The password is 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+which is password for bandit13
 yeaaaaah!!!
 
 For these level these commands will be used
@@ -186,11 +187,82 @@ The password for the next level is stored in /etc/bandit_pass/bandit14 and can o
 password, but you get a private SSH key that can be used to log into the next level. Note: localhost is a hostname that refers to the machine you are 
 working on
 
-until next time, I will be alive.....
+upon reading the manuals of openssl and s_client, it is found that we can use the private key to connect to a pc if it is setup. so we got the private key
+now just find a way to connect the same local host with different user (bandit14) as only bandit14 is able to read its password.
+upon trying and failing with different switches and options found that
+openssl s_client -connect 127.0.0.1:22 -key sshkey.private 
+gives something like
+CONNECTED(00000003)
+140227959418944:error:1408F10B:SSL routines:ssl3_get_record:wrong version number:../ssl/record/ssl3_record.c:252:
+---
+no peer certificate available
+---
+No client certificate CA names sent
+---
+SSL handshake has read 5 bytes and written 176 bytes
+Verification: OK
+---
+New, (NONE), Cipher is (NONE)
+Secure Renegotiation IS NOT supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : 0000
+    Session-ID:
+    Session-ID-ctx:
+    Master-Key:
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    Start Time: 1653573278
+    Timeout   : 7200 (sec)
+    Verify return code: 0 (ok)
+    Extended master secret: no
+---
 
+but it disconnects immediately and we have to find the way to issue commands
+so I just found out that ssh command offers a -i switch that can be used to use private keys to connect
+so
+ssh -i sshkey.private bandit14@127.0.0.1 -p 22
+port 22 as it is open internally, checked via nmap, 2220 doesn't work it is for firewall redirecting it to bandit (I think)
+so we are in with bandit14 user
+cat /etc/bandit_pass/bandit14
+gave
+4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+which is password for bandit14
 
+Level 14:
+the goal says
+The password for the next level can be retrieved by submitting the password of the current level to port 30000 on localhost.
 
+okay we can connect with ports or ips and send files via telnet or nc, lets try manuals
+tried nc -l -p 30000 -c 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e
+-c to execute the string which is password and -l to listen anything but it stuck
+tried the localhost 127.0.0.1 no result 
+ommitting -l switch gave no destination, and no port to connect
+tried 
+ nc -p 30000 -c echo 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e 127.0.0.1
+ but it says 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e: forward host lookup failed: No address associated with name
+so I think I have to pipe the echo command
+echo 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3enc | nc -p 30000
+says no destination
+echo 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3enc | nc  127.0.0.1 30000
+says: Wrong! Please enter the correct current password
+shit!!!!
+I have been using the wrong password (me, slap on my head!!!)
+ echo 4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e | nc  127.0.0.1 30000  
+gave 
+Correct!
+BfMYroe26WYalil77FoDi9qh59eK5xNr
+which is password for next level bandit15
 
+Level 15:
+the goal says
+The password for the next level can be retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption.
+Helpful note: Getting “HEARTBEATING” and “Read R BLOCK”? Use -ign_eof and read the “CONNECTED COMMANDS” section in the manpage. Next to ‘R’ and ‘Q’, 
+the ‘B’ command also works in this version of that command…
 
 
 
