@@ -264,7 +264,107 @@ The password for the next level can be retrieved by submitting the password of t
 Helpful note: Getting “HEARTBEATING” and “Read R BLOCK”? Use -ign_eof and read the “CONNECTED COMMANDS” section in the manpage. Next to ‘R’ and ‘Q’, 
 the ‘B’ command also works in this version of that command…
 
+well on reading the wiki pages and understanding the concept and on looking the manuals, just remembered I tried connecting via ssl in previous levels
+then connecting again
+echo BfMYroe26WYalil77FoDi9qh59eK5xNr | openssl s_client -connect 127.0.0.1:30001
+but it showed server certificate and keys and closed the connection 
+oh yeah the -ign_eof switch 
+echo BfMYroe26WYalil77FoDi9qh59eK5xNr | openssl s_client -connect 127.0.0.1:30001 -ign_eof
+did the trick, showed the same message as before but at the last few lines
 
+Correct!
+cluFn7wTiGryunymYOu4RcffSxQluehd
 
+closed
 
+so cluFn7wTiGryunymYOu4RcffSxQluehd is the password for bandit16
+
+Level 16:
+
+The credentials for the next level can be retrieved by submitting the password of the current level to a port on localhost in the range 31000 to 32000. 
+First find out which of these ports have a server listening on them. Then find out which of those speak SSL and which don’t. There is only 1 server that 
+will give the next credentials, the others will simply send back to you whatever you send to it.
+
+so
+nmap -p 31000-32000 127.0.0.1 -> gave
+
+Starting Nmap 7.40 ( https://nmap.org ) at 2022-05-27 14:21 CEST
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00043s latency).
+Not shown: 996 closed ports
+PORT      STATE    SERVICE
+31046/tcp open     unknown
+31518/tcp filtered unknown
+31691/tcp open     unknown
+31790/tcp open     unknown
+31960/tcp open     unknown
+
+so now finding SSL ports
+tested each port via
+openssl s_client -connect 127.0.0.1:[port]
+only 31790 showed a certificate others just connected and disconnected.
+so
+echo cluFn7wTiGryunymYOu4RcffSxQluehd | openssl s_client -connect 127.0.0.1:31790 
+gave the same thing (certificate of client) as before without sending anything
+but 
+echo cluFn7wTiGryunymYOu4RcffSxQluehd | openssl s_client -connect 127.0.0.1:31790 -ign_eof
+gave a private key at the last
+
+Correct!
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+so no password amigo???
+the goal says, next credientials, so I guess, this is it.
+so we have to connect to the local host by sending the file as before but we first have to output the returned output to a file.
+echo cluFn7wTiGryunymYOu4RcffSxQluehd | openssl s_client -connect 127.0.0.1:31790 -quiet -msgfile key.private
+gives the plain key but with other info as well so lets go with traditional method of copy pasting and saving it to a file (key.private)
+created it at /tmp/directoryname as we cannot create anywhere else
+
+used
+ssh -i key.private bandit17@127.0.0.1 -p 22
+but it gave error that the private key is too open (permissions) for other users so ignoring it.
+we need to change the permission, 
+chmod 400 key.private
+so that only bandit16 can read it.
+now trying again with
+ssh -i key.private bandit17@127.0.0.1 -p 22
+oh yess we are in bandit17
+now 
+cat /etc/bandit_pass/bandit17
+gave -> xLYVMN9WE5zQ5vHacb0sZEVqbrp7nBTn
+which is password for bandit17
+
+the following commands or tools will be used to complete these languages
+cat, grep, ls, diff
+
+Level 17:
+There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that has been changed between passwords.old and passwords.new
+
+NOTE: if you have solved this level and see ‘Byebye!’ when trying to log into bandit18, this is related to the next level, bandit19
 
