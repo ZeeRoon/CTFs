@@ -364,7 +364,65 @@ the following commands or tools will be used to complete these languages
 cat, grep, ls, diff
 
 Level 17:
-There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that has been changed between passwords.old and passwords.new
+There are 2 files in the homedirectory: passwords.old and passwords.new. The password for the next level is in passwords.new and is the only line that 
+has been changed between passwords.old and passwords.new
 
 NOTE: if you have solved this level and see ‘Byebye!’ when trying to log into bandit18, this is related to the next level, bandit19
+
+so the diff command do the difference between files and folders
+trying simple usage
+diff passwords.new passwords.old 
+gives
+
+42c42
+< kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd
+---
+> w0Yfolrc5bwjS4qw5mq1nnQi6mF03bii
+
+so the < maybe shows the difference in first file assuming
+after testing we got into bandit18 but it says bye! and connection closes everytime try to login so its connected to next level.
+so kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd is password for level 18
+
+Level 18:
+the level goal says:
+The password for the next level is stored in a file readme in the homedirectory. Unfortunately, someone has modified .bashrc to log you out when you log 
+in with SSH.
+
+so ssh command comes with an option it can directly run commands when connects
+since we know the password is in readme file in home directory but lets try out
+ssh bandit18@bandit.labs.overthewire.org -p 2220 ls
+so it shows
+readme
+a file
+ssh bandit18@bandit.labs.overthewire.org -p 2220 -N cat readme
+shows
+IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
+which is password for next round
+
+Level 19:
+the goal says:
+To gain access to the next level, you should use the setuid binary in the homedirectory. Execute it without arguments to find out how to use it. The 
+password for this level can be found in the usual place (/etc/bandit_pass), after you have used the setuid binary.
+
+so there are files permission flags namely setuid (for users) and setgid (for groups) they can be used to restrict users and groups from accessing files
+but some software needs specific permissions (not all) for that custom binaries or permissions are made
+so we got a binary that can execute commands as bandit20 so the password for bandit20 is in /etc/bandit_pass/bandit20
+lets do
+./bandit20-do cat /etc/bandit_pass/bandit20
+voila!!! got
+GbKksEFF4yrVs6il55v6gwY5aVje5f0j
+which is password for Level 20
+
+commands to complete these levels in
+
+Level 20:
+the goal says:
+
+
+
+
+
+
+
+
 
