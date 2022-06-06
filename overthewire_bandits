@@ -510,32 +510,91 @@ echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
 
 cat /etc/bandit_pass/$myname > /tmp/$mytarget
 
-so the scripts simply use mytarget variable and creates md5 checksum for naming the file name, which is used for accessing the next level password
+so the scripts simply use mytarget variable (which uses whoami variable so we have to change it to bandit23) and creates md5 checksum for naming the file name, which is used for accessing the next level password
 and saving it in the file. wow!
 
-lets first we get the file name by
-echo $(echo I am user $myname | md5sum | cut -d ' ' -f 1)
-which gives
-7db97df393f40ad1691b6e1fb03d53eb
+so lets first start by doing
+myname=bandit23
+echo I am user $myname | md5sum | cut -d ' ' -f 1
 
-now access it
-cat /tmp/7db97df393f40ad1691b6e1fb03d53eb
-it gives nothing :)))))
-oh yess... my bad lets run the script then check
+which will give us
 
-/usr/bin/cronjob_bandit23.sh
-Copying passwordfile /etc/bandit_pass/bandit22 to /tmp/8169b67bd894ddbb4412f91573b38db3
+8ca319486bfbbc3663ea0fbe81326349
 
-yukk!!!
-I think I have miscalculated the md5 :(
-let access it then
-cat /tmp/8169b67bd894ddbb4412f91573b38db3
-Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI which is the password for next level
+now lets access it in tmp file
+
+cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n --> which is password for next level
+
 
 Level 23:
 the goal says:
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what
+command is being executed.
 
+NOTE: This level requires you to create your own first shell-script. This is a very big step and you should be proud of yourself when you beat this 
+level!
 
+NOTE 2: Keep in mind that your shell script is removed once executed, so you may want to keep a copy around…
 
+okay another similar one lets look whats inside the cron job
+cat /etc/cron.d/cronjob_bandit24
+gives
+@reboot bandit24 /usr/bin/cronjob_bandit24.sh &> /dev/null
+* * * * * bandit24 /usr/bin/cronjob_bandit24.sh &> /dev/null
+now the script
+cat /usr/bin/cronjob_bandit24.sh
+gives
+#!/bin/bash
 
+myname=$(whoami)
+
+cd /var/spool/$myname
+echo "Executing and deleting all scripts in /var/spool/$myname:"
+for i in * .*;
+do
+    if [ "$i" != "." -a "$i" != ".." ];
+    then
+        echo "Handling $i"
+        owner="$(stat --format "%U" ./$i)"
+        if [ "${owner}" = "bandit23" ]; then
+            timeout -s 9 60 ./$i
+        fi
+        rm -f ./$i
+    fi
+done
+
+so the script runs other scriptes in /var/spool/bandit13 after every 60 seconds, 
+so what we will do ??
+we will write a script to copy password for us
+and since only that user can run it, we will copy it to the spool folder bandit24 which will run after a minute
+and we will grab it
+lets do this,
+since the home directory doesn't allow us to create something lets head to /tmp and create a folder with a file
+cd /tmp
+mkdir zeeroonhere
+cd zeeroonhere
+touch test
+nano test
+
+then add this
+
+#! /bin/bash
+
+cat /etc/bandit_pass/bandit24 > /tmp/zeeroonhere/test
+
+save it and copy it to /var/spool/bandit24 and wait for a minute and then cat the file in /tmp/zeeroonhere/test
+oh sorry, before copying just change permission to 777 so everyone can execute it :)
+
+cat test
+voila 
+UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ --> password for bandit24 :)
+
+Level 24:
+the goal says:
+A daemon is listening on port 30002 and will give you the password for bandit25 if given the password for bandit24 and a secret numeric 4-digit pincode. 
+There is no way to retrieve the pincode except by going through all of the 10000 combinations, called brute-forcing.
+
+oooh so no guide to use which tools nice...
+lets try something
 
