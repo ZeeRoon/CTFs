@@ -414,15 +414,126 @@ GbKksEFF4yrVs6il55v6gwY5aVje5f0j
 which is password for Level 20
 
 commands to complete these levels in
+ssh, nc, cat, bash, screen, tmux, Unix ‘job control’ (bg, fg, jobs, &, CTRL-Z, …)
 
 Level 20:
 the goal says:
+There is a setuid binary in the homedirectory that does the following: it makes a connection to localhost on the port you specify as a commandline 
+argument. It then reads a line of text from the connection and compares it to the password in the previous level (bandit20). If the password is correct,
+it will transmit the password for the next level (bandit21).
 
+NOTE: Try connecting to your own network daemon to see if it works as you think
 
+so we got a setuid binary that connects to a port and ask for current password and returns the next level.
+tried connecting with default tcp port 443 but it did not respond, it stuck....
+did a nmap to scan for available ports 
+tried connecting with all but nothing, it stuck again.
+...
+multiple tries but nothing....
+found an article :(.
+so the thing is we have to specify a port ourselve which we will let the machine to listen via netcat
 
+so 
+echo "GbKksEFF4yrVs6il55v6gwY5aVje5f0j" | nc -lp 1234 &
+and then connect with
+./suconnect 1234
+and enter the password 
+it will return
 
+gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
+that is the password for level 21
 
+The commands to solve these level
+cron, crontab, crontab(5) (use “man 5 crontab” to access this)
 
+Level 21:
+the goal says:
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what 
+command is being executed.
+
+so lets check the cron jobs
+ls /etc/cron.d/
+it shows 
+cronjob_bandit15_root  cronjob_bandit17_root  cronjob_bandit22  cronjob_bandit23  cronjob_bandit24  cronjob_bandit25_root
+so there is a cronjob for bandit22 (the next level)
+lets check what it does
+cat /etc/cron.d/cronjob_bandit22
+it showed
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+so apparently, it runs a script at every time it reboots but outputs anything to the void
+lets check what does the script does 
+
+cat /usr/bin/cronjob_bandit22.sh
+it showed 
+
+#!/bin/bash
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+so theres a file in /tmp which contains a file containing password which will be fetch the password and overwrite it???
+lets run it.
+well, we don't have permisisons but lets access the file
+cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+it gave
+Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
+that must be the password for next level
+
+Level 22:
+the goal says
+A program is running automatically at regular intervals from cron, the time-based job scheduler. Look in /etc/cron.d/ for the configuration and see what 
+command is being executed.
+
+NOTE: Looking at shell scripts written by other people is a very useful skill. The script for this level is intentionally made easy to read. If you are 
+having problems understanding what it does, try executing it to see the debug information it prints.
+
+so we got the similar challenge here
+lets check whats in /etc/cron.d/ again
+as checked, we have
+cronjob_bandit15_root  cronjob_bandit17_root  cronjob_bandit22  cronjob_bandit23  cronjob_bandit24  cronjob_bandit25_root
+lets check what script does cronjob_bandit23
+cat /etc/cron.d/cronjob_bandit23
+it showed
+@reboot bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+
+so  lets check the script
+
+cat /usr/bin/cronjob_bandit23.sh
+#!/bin/bash
+
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+
+echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+
+cat /etc/bandit_pass/$myname > /tmp/$mytarget
+
+so the scripts simply use mytarget variable and creates md5 checksum for naming the file name, which is used for accessing the next level password
+and saving it in the file. wow!
+
+lets first we get the file name by
+echo $(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+which gives
+7db97df393f40ad1691b6e1fb03d53eb
+
+now access it
+cat /tmp/7db97df393f40ad1691b6e1fb03d53eb
+it gives nothing :)))))
+oh yess... my bad lets run the script then check
+
+/usr/bin/cronjob_bandit23.sh
+Copying passwordfile /etc/bandit_pass/bandit22 to /tmp/8169b67bd894ddbb4412f91573b38db3
+
+yukk!!!
+I think I have miscalculated the md5 :(
+let access it then
+cat /tmp/8169b67bd894ddbb4412f91573b38db3
+Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI which is the password for next level
+
+Level 23:
+the goal says:
 
 
 
