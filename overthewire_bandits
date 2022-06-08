@@ -673,11 +673,27 @@ export TERM=linux
 more ~/text.txt
 exit 0
 
- 
+so it opens more command which is just a reader limiting you ouput scaled to your screen with some control
+the trick is to think out of the box, resize the terminal too small and try agian
 
+ssh -i bandit26.sshkey bandit26@localhost
+now we got something like more (some percentage)
+now resize
+type v we will go to vim editor
+from there we can open another files, what about the password for in /etc/bandit_pass/bandit26
+so 
+:e /etc/bandit_pass/bandit26
+it will open and give us
 
+5czgV9L3Xx8JPOyRbXh6lQbmIOWvPT6Z
+which is password for bandit26
 
+Level 27:
+the goal says
+Good job getting a shell! Now hurry and grab the password for bandit27!
 
-
+oh yass the bandit26 uses some non standard shell or as we know a custom script so lets do what we did and open vim as we did before
+now that we got into vim, theres a command in vim which let it run a shell
+:shell
 
 
