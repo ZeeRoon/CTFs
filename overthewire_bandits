@@ -695,5 +695,295 @@ Good job getting a shell! Now hurry and grab the password for bandit27!
 oh yass the bandit26 uses some non standard shell or as we know a custom script so lets do what we did and open vim as we did before
 now that we got into vim, theres a command in vim which let it run a shell
 :shell
+so it is redirecting us to the same thing the text bandit26 or text.txt file
+okay since the shell is set to /usr/bin/text.txt maybe thats why
+so in vim 
+:set shell=/bin/bash
+then 
+:shell
+this will get us into a shell
+upon ls we have a setuid binary file for bandit27 so we will fetch its password with it
+./bandit27-do cat /etc/bandit_pass/bandit27
+
+3ba3118a22e93127a4ed485be72ef5ea
+which is password for bandit27
+
+These tools will be used to complete the level
+git
+
+Level 28:
+the level goal says:
+There is a git repository at ssh://bandit27-git@localhost/home/bandit27-git/repo. The password for the user bandit27-git is the same as for the user 
+bandit27.
+
+Clone the repository and find the password for the next level.
+
+so we have got a repository in localhost using git. but accessing directly /home/bandit27-git/repo, we don't have permission
+so we have to clone the repo to somewhere, since we can't even create anything at home directory too </3
+so lets go to /tmp and create a directory there and cd into it,
+then 
+git clone ssh://bandit27-git@localhost/home/bandit27-git/repo
+cd repo
+ls
+gives
+README
+upon cat
+0ef186ac70e04ea33b4c1853d2526fa2
+which is password for bandit28
+
+Level 28:
+the goal says
+There is a git repository at ssh://bandit28-git@localhost/home/bandit28-git/repo. The password for the user bandit28-git is the same as for the user 
+bandit28.
+
+Clone the repository and find the password for the next level.
+
+so, same create tmp directory in /tmp cd in it,
+clone it,
+we will get a README.md but upon cat it shows
+
+# Bandit Notes
+Some notes for level29 of bandit.
+
+## credentials
+
+- username: bandit29
+- password: xxxxxxxxxx
+
+so there's no password here, lets check if there's something in the logs
+
+git log
+shows
+
+commit edd935d60906b33f0619605abd1689808ccdd5ee
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+
+    fix info leak
+
+commit c086d11a00c0648d095d04c089786efef5e01264
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+
+    add missing data
+
+commit de2ebe2d5fd1598cd547f4d56247e053be3fdc38
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+
+    initial commit of README.md
+
+so there's fix info and add missing data commits 
+now there's a switch which shows specific and all the changes in the file, so lets see all
+git log -p
+shows
+
+commit edd935d60906b33f0619605abd1689808ccdd5ee
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+
+    fix info leak
+
+diff --git a/README.md b/README.md
+index 3f7cee8..5c6457b 100644
+--- a/README.md
++++ b/README.md
+@@ -4,5 +4,5 @@ Some notes for level29 of bandit.
+ ## credentials
+ 
+ - username: bandit29
+-- password: bbc96594b4e001778eee9975372716b2
++- password: xxxxxxxxxx
+ 
+
+commit c086d11a00c0648d095d04c089786efef5e01264
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+index 3f7cee8..5c6457b 100644
+--- a/README.md
++++ b/README.md
+@@ -4,5 +4,5 @@ Some notes for level29 of bandit.
+ ## credentials
+ 
+ - username: bandit29
+-- password: bbc96594b4e001778eee9975372716b2
++- password: xxxxxxxxxx
+ 
+
+commit c086d11a00c0648d095d04c089786efef5e01264
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+
+    add missing data
+
+diff --git a/README.md b/README.md
+index 7ba2d2f..3f7cee8 100644
+--- a/README.md
++++ b/README.md
+@@ -4,5 +4,5 @@ Some notes for level29 of bandit.
+ ## credentials
+ 
+ - username: bandit29
+-- password: <TBD>
++- password: bbc96594b4e001778eee9975372716b2
+ 
+
+commit de2ebe2d5fd1598cd547f4d56247e053be3fdc38
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu May 7 20:14:49 2020 +0200
+
+    initial commit of README.md
+
+diff --git a/README.md b/README.md
+
+so we got bbc96594b4e001778eee9975372716b2 which is password for bandit29
+
+LEVEL 29:
+the goal says
+There is a git repository at ssh://bandit29-git@localhost/home/bandit29-git/repo. The password for the user bandit29-git is the same as for the user 
+bandit29.
+
+Clone the repository and find the password for the next level.
+
+ok, done with cloning
+checking the README.md file
+it says
+# Bandit Notes
+Some notes for bandit30 of bandit.
+
+## credentials
+
+- username: bandit30
+- password: <no passwords in production!>
+
+so the production ring some bells, I have heard and researched that developers practice to not save password in the production environment 
+they use APIs for them and for testing they use different branches to save and test the system with saved passwords.
+now lets see what branches do we have 
+
+git branches -r # the -r switch shows all the remote-tracking branches
+it shows
+origin/HEAD -> origin/master
+origin/dev
+origin/master
+origin/sploits-dev
+
+so its using master branch, but there's other too,
+lets check out dev
+for that
+git checkout dev
+then let see the logs
+
+git log
+
+commit bc833286fca18a3948aec989f7025e23ffc16c07
+Author: Morla Porla <morla@overthewire.org>
+Date:   Thu May 7 20:14:52 2020 +0200
+
+    add data needed for development
+
+commit 8e6c203f885bd4cd77602f8b9a9ea479929ffa57
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu May 7 20:14:51 2020 +0200
+
+    add gif2ascii
+
+commit 208f463b5b3992906eabf23c562eda3277fea912
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu May 7 20:14:51 2020 +0200
+
+    fix username
+
+commit 18a6fd6d5ef7f0874bbdda2fa0d77b3b81fd63f7
+Author: Ben Dover <noone@overthewire.org>
+Date:   Thu May 7 20:14:51 2020 +0200
+
+    initial commit of README.md
+
+
+so we should have password in this branch (add data needed for development)
+
+cat README.md
+shows
+
+# Bandit Notes
+Some notes for bandit30 of bandit.
+
+## credentials
+
+- username: bandit30
+- password: 5b90576bedb2cc04c86a9e924ce42faf
+
+so the password for bandit30 is 
+
+
+LEVEL 30:
+the goal says:
+There is a git repository at ssh://bandit30-git@localhost/home/bandit30-git/repo. The password for the user bandit30-git is the same as for the user 
+bandit30.
+
+Clone the repository and find the password for the next level.
+done with the tmp directory and cloning
+now cat README.md
+just an epmty file... muahaha
+:D XD
+okay, so lets check with the logs,
+nothing... here
+so what about branches,
+no other branches... :(
+couldn't find anything lets check the others guide
+
+so we have to check into the .git repo
+there will be a tag in packed-refs
+catting it will give us
+now confirming the tag 
+we use 
+git tag
+which will say 
+secret
+upon accessing the secret object via
+git show secret we will get 
+47e603bb428404d265f59c42920d81e5
+which is the password for bandit30
+
+LEVEL 31:
+the goal says:
+There is a git repository at ssh://bandit31-git@localhost/home/bandit31-git/repo. The password for the user bandit31-git is the same as for the user 
+bandit31.
+
+Clone the repository and find the password for the next level.
+
+again done with creating tmp directory and cloning
+so 
+cat README.md 
+
+showed 
+
+This time your task is to push a file to the remote repository.
+
+Details:
+    File name: key.txt
+    Content: 'May I come in?'
+    Branch: master
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
